@@ -9,10 +9,14 @@ Scripts de administración para VPS Ubuntu/Debian.
 ## Instalación rápida
 
 ```bash
+git clone https://github.com/quetzalx/vps-tools.git
+cd vps-tools
 sudo bash install.sh
 ```
 
 El instalador solicita el email de destino, cuenta Gmail y App Password, y configura todo automáticamente.
+
+> **Requisito previo:** genera un [App Password de Google](https://myaccount.google.com/apppasswords) antes de ejecutar el instalador (requiere 2FA activo en la cuenta Gmail).
 
 ## Scripts
 
