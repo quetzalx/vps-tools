@@ -1,0 +1,16 @@
+# Credenciales
+.msmtprc
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Temporales
+*.tmp
+*.swp
+*~
