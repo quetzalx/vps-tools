@@ -1,5 +1,9 @@
 # vps-tools
 
+![Last commit](https://img.shields.io/github/last-commit/quetzalx/vps-tools)
+![Repo size](https://img.shields.io/github/repo-size/quetzalx/vps-tools)
+![License](https://img.shields.io/github/license/quetzalx/vps-tools)
+
 Scripts de administración para VPS Ubuntu/Debian.
 
 ## Instalación rápida
