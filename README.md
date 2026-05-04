@@ -77,6 +77,25 @@ python3 large_files.py /var/log 10 --sort-by name
 
 ---
 
+### `disk_monitor.sh`
+
+Monitorea el uso de disco y envía una alerta por email si alguna partición supera el umbral.
+
+```bash
+sudo bash disk_monitor.sh [umbral_%]
+```
+
+El umbral por defecto es `80` (%). Tras la instalación se ejecuta automáticamente cada día a las 8:00 AM vía cron.
+
+**Ejemplos:**
+
+```bash
+sudo bash disk_monitor.sh        # alerta si alguna partición supera el 80%
+sudo bash disk_monitor.sh 90     # alerta al 90%
+```
+
+---
+
 ### `msmtp_setup.sh`
 
 Configura msmtp con Gmail de forma interactiva (incluido en `install.sh`).
@@ -94,6 +113,7 @@ Requiere un [App Password de Google](https://myaccount.google.com/apppasswords) 
 | Ruta | Descripción |
 |---|---|
 | `/usr/local/lib/vps-update/update_vps.sh` | Script de actualización |
+| `/usr/local/lib/vps-update/disk_monitor.sh` | Script de monitoreo de disco |
 | `/root/.msmtprc` | Credenciales Gmail (modo `600`) |
 | `/etc/logrotate.d/vps_update` | Rotación semanal, 12 semanas de historial |
 | `/var/log/vps_update.log` | Log de actualizaciones |

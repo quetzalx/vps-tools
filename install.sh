@@ -3,9 +3,11 @@ set -euo pipefail
 
 INSTALL_DIR="/usr/local/lib/vps-update"
 UPDATE_SCRIPT="$INSTALL_DIR/update_vps.sh"
+DISK_SCRIPT="$INSTALL_DIR/disk_monitor.sh"
 LOGROTATE_CONF="/etc/logrotate.d/vps_update"
 MSMTP_CONFIG="/root/.msmtprc"
 CRON_ENTRY="0 2 * * 0 $UPDATE_SCRIPT >> /var/log/vps_update.log 2>&1"
+CRON_DISK="0 8 * * * $DISK_SCRIPT >> /var/log/vps_update.log 2>&1"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; NC='\033[0m'
 ok()   { echo -e "${GREEN}[OK]${NC} $*"; }
@@ -113,13 +115,29 @@ cat > "$LOGROTATE_CONF" <<EOF
 EOF
 ok "Logrotate configurado en $LOGROTATE_CONF."
 
-# --- Cron job ---
-if crontab -l 2>/dev/null | grep -qF "$UPDATE_SCRIPT"; then
-    warn "El cron job ya existía, se omite."
+# --- Script de monitoreo de disco ---
+cp "$(dirname "$0")/disk_monitor.sh" "$DISK_SCRIPT"
+chmod 750 "$DISK_SCRIPT"
+ok "Script de monitoreo instalado en $DISK_SCRIPT."
+
+# --- Cron jobs ---
+CRONTAB=$(crontab -l 2>/dev/null || true)
+
+if echo "$CRONTAB" | grep -qF "$UPDATE_SCRIPT"; then
+    warn "El cron job de actualización ya existía, se omite."
 else
-    (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
-    ok "Cron job registrado (domingos a las 2:00 AM)."
+    CRONTAB+=$'\n'"$CRON_ENTRY"
+    ok "Cron job de actualización registrado (domingos a las 2:00 AM)."
 fi
+
+if echo "$CRONTAB" | grep -qF "$DISK_SCRIPT"; then
+    warn "El cron job de disco ya existía, se omite."
+else
+    CRONTAB+=$'\n'"$CRON_DISK"
+    ok "Cron job de disco registrado (diario a las 8:00 AM)."
+fi
+
+echo "$CRONTAB" | crontab -
 
 # --- Email de prueba ---
 echo
